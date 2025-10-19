@@ -17,6 +17,7 @@ import UserProfile from './pages/UserProfile';
 import Orders from './pages/Orders';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 
 // Note: Amplify is configured in index.js before this component loads
@@ -37,6 +38,7 @@ export default function App() {
                   <Route path="/cart" element={<CartPage />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/checkout" element={
                     <ProtectedRoute>
                       <Checkout />
