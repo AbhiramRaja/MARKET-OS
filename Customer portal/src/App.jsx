@@ -1,9 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Amplify } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import awsExports from './aws-exports';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import { AuthProvider } from './context/AuthContext';
@@ -21,8 +19,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Configure Amplify
-Amplify.configure(awsExports);
+// Note: Amplify is configured in index.js before this component loads
 
 export default function App() {
   return (
