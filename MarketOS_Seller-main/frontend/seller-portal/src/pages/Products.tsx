@@ -14,9 +14,29 @@ interface Product {
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [showAddForm, setShowAddForm] = useState(false)
+  const [saving, setSaving] = useState(false)
   const saved = getSavedSeller()
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    name: '',
+    category: 'Electronics',
+    price: '',
+    stock: '',
+    description: '',
+    imageUrl: ''
+  })
 
+  // Load products from localStorage
   useEffect(() => {
+    const savedProducts = localStorage.getItem('sellerProducts')
+    if (savedProducts) {
+      setProducts(JSON.parse(savedProducts))
+      setLoading(false)
+      return
+    }
+    
     // Demo products for realistic presentation - 12 products total
     const demoProducts: Product[] = [
       {
@@ -130,8 +150,80 @@ export default function Products() {
     ]
     
     setProducts(demoProducts)
+    localStorage.setItem('sellerProducts', JSON.stringify(demoProducts))
     setLoading(false)
   }, [saved.sellerId])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleAddProduct = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+
+    try {
+      const newProduct: Product = {
+        productId: `PROD-${Date.now()}`,
+        name: formData.name,
+        category: formData.category,
+        price: parseFloat(formData.price),
+        stock: parseInt(formData.stock),
+        description: formData.description,
+        imageUrl: formData.imageUrl || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop'
+      }
+
+      const updatedProducts = [...products, newProduct]
+      setProducts(updatedProducts)
+      localStorage.setItem('sellerProducts', JSON.stringify(updatedProducts))
+
+      // Also try to save to backend if available
+      try {
+        await fetch('http://localhost:3001/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...newProduct,
+            sellerId: saved.sellerId,
+            sellerName: saved.businessName
+          })
+        })
+        console.log('✅ Product saved to backend')
+      } catch (backendError) {
+        console.log('ℹ️ Backend not available, product saved locally only')
+      }
+
+      alert('✅ Product added successfully!')
+      
+      // Reset form
+      setFormData({
+        name: '',
+        category: 'Electronics',
+        price: '',
+        stock: '',
+        description: '',
+        imageUrl: ''
+      })
+      setShowAddForm(false)
+    } catch (error) {
+      console.error('Error adding product:', error)
+      alert('❌ Failed to add product')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const handleDeleteProduct = (productId: string) => {
+    if (confirm('Are you sure you want to delete this product?')) {
+      const updatedProducts = products.filter(p => p.productId !== productId)
+      setProducts(updatedProducts)
+      localStorage.setItem('sellerProducts', JSON.stringify(updatedProducts))
+      alert('✅ Product deleted successfully!')
+    }
+  }
 
   if (loading) {
     return (
@@ -149,10 +241,131 @@ export default function Products() {
           <h2 className="text-3xl font-bold text-white mb-2">📦 Products</h2>
           <p className="text-gray-400">You have {products.length} products</p>
         </div>
-        <button className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/50 transition-all">
-          ➕ Add New Product
+        <button 
+          onClick={() => setShowAddForm(!showAddForm)}
+          className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-purple-500/50 transition-all"
+        >
+          {showAddForm ? '❌ Cancel' : '➕ Add New Product'}
         </button>
       </div>
+
+      {showAddForm && (
+        <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border border-purple-500/30 rounded-xl p-6 mb-8">
+          <h3 className="text-2xl font-bold text-white mb-6">Add New Product</h3>
+          <form onSubmit={handleAddProduct} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white font-semibold mb-2">Product Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="e.g., Wireless Headphones"
+                  className="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-white font-semibold mb-2">Category *</label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white focus:outline-none focus:border-purple-500"
+                >
+                  <option value="Electronics">Electronics</option>
+                  <option value="Fashion">Fashion</option>
+                  <option value="Home & Garden">Home & Garden</option>
+                  <option value="Gaming">Gaming</option>
+                  <option value="Accessories">Accessories</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Books">Books</option>
+                  <option value="Toys">Toys</option>
+                  <option value="Food">Food</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-white font-semibold mb-2">Price (₹) *</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  required
+                  min="0"
+                  step="0.01"
+                  placeholder="e.g., 2999"
+                  className="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-white font-semibold mb-2">Stock Quantity *</label>
+                <input
+                  type="number"
+                  name="stock"
+                  value={formData.stock}
+                  onChange={handleInputChange}
+                  required
+                  min="0"
+                  placeholder="e.g., 50"
+                  className="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-white font-semibold mb-2">Description *</label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                required
+                rows={3}
+                placeholder="Describe your product in detail..."
+                className="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-white font-semibold mb-2">Image URL (optional)</label>
+              <input
+                type="url"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleInputChange}
+                placeholder="https://example.com/image.jpg"
+                className="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+              />
+              <p className="text-sm text-gray-400 mt-2">Leave empty for default image</p>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                disabled={saving}
+                className={`flex-1 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-green-500/50 transition-all ${
+                  saving ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+              >
+                {saving ? '⏳ Adding Product...' : '✅ Add Product'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowAddForm(false)}
+                className="px-6 py-3 bg-gray-700 text-white font-bold rounded-xl hover:bg-gray-600 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
@@ -183,7 +396,10 @@ export default function Products() {
               <button className="flex-1 px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/50 rounded-lg text-purple-300 font-semibold transition-all">
                 ✏️ Edit
               </button>
-              <button className="flex-1 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 font-semibold transition-all">
+              <button 
+                onClick={() => handleDeleteProduct(product.productId)}
+                className="flex-1 px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 rounded-lg text-red-300 font-semibold transition-all"
+              >
                 🗑️ Delete
               </button>
             </div>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { signOut } from 'aws-amplify/auth'
-import { saveSeller } from './lib/seller-bus'
 import Dashboard from './pages/Dashboard'
 import Products from './pages/Products'
 import Orders from './pages/Orders'
@@ -38,7 +37,7 @@ function App() {
 
   // Check verification status on load
   useEffect(() => {
-    const checkVerificationStatus = async () => {
+    const checkVerificationStatus = () => {
       try {
         // Check if user is logged in via Cognito
         const isLoggedIn = localStorage.getItem('sellerLoggedIn') === 'true'
@@ -47,41 +46,16 @@ function App() {
           return
         }
 
-        // Get current seller data
+        // Get current seller data from localStorage
         const currentSeller = JSON.parse(localStorage.getItem('currentSeller') || '{}')
-        if (currentSeller.email) {
-          // Fetch latest seller data from DynamoDB
-          try {
-            const response = await fetch(`http://localhost:3001/sellers/email/${encodeURIComponent(currentSeller.email)}`)
-            if (response.ok) {
-              const sellerData = await response.json()
-              
-              // Update localStorage with latest data
-              localStorage.setItem('currentSeller', JSON.stringify(sellerData))
-              localStorage.setItem('verificationStatus', sellerData.verificationStatus || 'pending')
-              localStorage.setItem('documentsSubmitted', sellerData.documentsSubmitted ? 'true' : 'false')
-              
-              saveSeller({ 
-                sellerId: sellerData.sellerId,
-                businessName: sellerData.businessName,
-                email: sellerData.email
-              })
-              
-              // Check verification status
-              setHasSubmittedDocuments(sellerData.documentsSubmitted === true)
-              setIsVerified(sellerData.verificationStatus === 'approved')
-            } else {
-              // Seller not found in database, use cached data
-              setHasSubmittedDocuments(currentSeller.documentsSubmitted === true)
-              setIsVerified(currentSeller.verificationStatus === 'approved')
-            }
-          } catch (fetchError) {
-            console.error('Failed to fetch seller data:', fetchError)
-            // Use cached data
-            setHasSubmittedDocuments(currentSeller.documentsSubmitted === true)
-            setIsVerified(currentSeller.verificationStatus === 'approved')
-          }
-        }
+        const verificationStatus = localStorage.getItem('verificationStatus') || currentSeller.verificationStatus || 'pending'
+        const documentsSubmitted = localStorage.getItem('documentsSubmitted') === 'true' || currentSeller.documentsSubmitted === true
+        
+        console.log('🔍 Verification check:', { verificationStatus, documentsSubmitted })
+        
+        // Update state based on localStorage
+        setHasSubmittedDocuments(documentsSubmitted)
+        setIsVerified(verificationStatus === 'approved')
         
         setIsLoading(false)
       } catch (error) {

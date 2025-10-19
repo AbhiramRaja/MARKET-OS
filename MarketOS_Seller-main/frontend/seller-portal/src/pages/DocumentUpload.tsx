@@ -52,57 +52,36 @@ export default function DocumentUpload({ onDocumentsSubmitted }: DocumentUploadP
     try {
       const currentSeller = JSON.parse(localStorage.getItem('currentSeller') || '{}')
       
-      // Submit verification request to backend (DynamoDB)
-      const response = await fetch('http://localhost:3001/notifications/seller-verification', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sellerId: currentSeller.sellerId || seller.sellerId,
-          businessName: currentSeller.businessName || seller.businessName,
-          email: currentSeller.email || seller.email,
-          documents: documents.map(d => ({
-            name: d.name,
-            uploaded: d.file !== null
-          })),
-          adminEmail: 'mmarket.os.123@gmail.com'
-        })
-      })
+      // Simulate document upload delay
+      await new Promise(resolve => setTimeout(resolve, 1500))
       
-      const data = await response.json()
+      // Update localStorage to mark documents as submitted and approved
+      // For demo/hackathon purposes, auto-approve seller
+      currentSeller.documentsSubmitted = true;
+      currentSeller.verificationStatus = 'approved'; // Auto-approve for demo
+      localStorage.setItem('currentSeller', JSON.stringify(currentSeller));
+      localStorage.setItem('verificationStatus', 'approved');
+      localStorage.setItem('documentsSubmitted', 'true');
       
-      // Update localStorage cache
-      if (currentSeller.email) {
-        currentSeller.documentsSubmitted = true;
-        currentSeller.verificationStatus = 'pending';
-        localStorage.setItem('currentSeller', JSON.stringify(currentSeller));
-        localStorage.setItem('verificationStatus', 'pending');
-        localStorage.setItem('documentsSubmitted', 'true');
+      console.log('✅ Documents submitted and auto-approved!', currentSeller);
+      
+      // Show success message
+      alert('✅ Documents submitted successfully!\n\n🎉 Your account has been verified!\n\nYou can now start adding products and managing your store.');
+      
+      setSubmitted(true)
+      if (onDocumentsSubmitted) {
+        onDocumentsSubmitted()
       }
       
-      if (response.ok) {
-        if (data.status === 'approved') {
-          alert('✅ You are already verified!')
-          localStorage.setItem('verificationStatus', 'approved')
-          window.location.reload()
-        } else if (data.status === 'pending') {
-          alert('⏳ Your verification request is already pending.\n\n📋 Admin will review it soon.')
-          setSubmitted(true)
-          if (onDocumentsSubmitted) {
-            onDocumentsSubmitted()
-          }
-        } else {
-          setSubmitted(true)
-          if (onDocumentsSubmitted) {
-            onDocumentsSubmitted()
-          }
-          alert('✅ Documents submitted successfully!\n\n📧 Admin will review your request.')
-        }
-      } else {
-        alert('❌ Failed to submit documents. Please try again.')
-      }
+      // Reload to show verified dashboard
+      setTimeout(() => {
+        console.log('🔄 Reloading page to show dashboard...');
+        window.location.reload()
+      }, 500)
+      
     } catch (error) {
       console.error('Submission error:', error)
-      alert('❌ Network error. Please check your connection and try again.')
+      alert('❌ An error occurred. Please try again.')
     } finally {
       setUploading(false)
     }

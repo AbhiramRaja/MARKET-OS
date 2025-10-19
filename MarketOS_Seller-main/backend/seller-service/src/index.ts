@@ -329,10 +329,10 @@ app.post('/admin/verify-seller/:sellerId', async (req, res) => {
     console.log(`✅ Found seller: ${seller.businessName} (${email})`);
 
     if (action === 'approve') {
-      // Update seller status to approved
+      // Update seller status to approved using email as key
       await dynamoDB.send(new UpdateCommand({
         TableName: TABLES.SELLERS,
-        Key: { sellerId },
+        Key: { email },
         UpdateExpression: 'SET verified = :verified, verificationStatus = :status, approvedAt = :approvedAt',
         ExpressionAttributeValues: {
           ':verified': true,
@@ -355,10 +355,10 @@ app.post('/admin/verify-seller/:sellerId', async (req, res) => {
       res.json({ success: true, message: 'Seller approved successfully' });
       
     } else if (action === 'reject') {
-      // Update seller status to rejected
+      // Update seller status to rejected using email as key
       const updateParams: any = {
         TableName: TABLES.SELLERS,
-        Key: { sellerId },
+        Key: { email },
         UpdateExpression: 'SET verified = :verified, verificationStatus = :status, rejectedAt = :rejectedAt',
         ExpressionAttributeValues: {
           ':verified': false,
@@ -638,7 +638,7 @@ app.put('/sellers/:sellerId', async (req, res) => {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Seller Service running on port ${PORT}`);
   console.log(`📊 Using DynamoDB tables:`);

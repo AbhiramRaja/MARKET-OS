@@ -1,0 +1,41 @@
+# Render.com Configuration for MarketOS Backend
+
+## Build Settings
+
+**Build Command:**
+```
+npm install && npm run build
+```
+
+**Start Command:**
+```
+node dist/index.js
+```
+
+**Root Directory:**
+```
+MarketOS_Seller-main/backend/seller-service
+```
+
+## Environment Variables
+
+Add these in Render dashboard:
+
+```
+PORT=3001
+NODE_ENV=production
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
+AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
+```
+
+## Health Check
+
+**Path:** `/sellers`
+**Expected Response:** JSON array
+
+## Notes
+
+- The TypeScript build outputs to `dist/` folder
+- Main entry point is `dist/index.js`
+- Make sure to set correct AWS credentials for DynamoDB access

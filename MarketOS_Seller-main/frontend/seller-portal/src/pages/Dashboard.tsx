@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getSavedSeller } from '../lib/seller-bus'
+import { getStats } from '../api/seller'
 
 type Page = 'dashboard' | 'orders' | 'products' | 'documents' | 'analytics' | 'inventory' | 'locations' | 'settings'
 
@@ -10,7 +10,6 @@ interface DashboardProps {
 export default function Dashboard({ onNavigate }: DashboardProps) {
   const [stats, setStats] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const seller = getSavedSeller()
 
   useEffect(() => {
     loadStats()

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { listOrders, updateOrderStatus } from './api/orders'
+import { updateOrderStatus } from './api/orders'
 
 export default function Orders() {
   const [orders, setOrders] = useState<any[]>([])

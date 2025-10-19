@@ -3,6 +3,9 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+// Email service is disabled for demo to avoid Gmail authentication issues
+const EMAIL_ENABLED = false;
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -12,6 +15,11 @@ const transporter = nodemailer.createTransport({
 })
 
 export async function sendAdminVerificationEmail(sellerData: any) {
+  if (!EMAIL_ENABLED) {
+    console.log('📧 Email service disabled - would have sent admin verification email');
+    return { success: true, message: 'Email disabled for demo' };
+  }
+  
   const approveUrl = `http://localhost:5173/admin/verify-seller/${sellerData.sellerId}?action=approve`
   const rejectUrl = `http://localhost:5173/admin/verify-seller/${sellerData.sellerId}?action=reject`
   
@@ -85,6 +93,11 @@ export async function sendAdminVerificationEmail(sellerData: any) {
 }
 
 export async function sendSellerApprovalEmail(sellerData: any) {
+  if (!EMAIL_ENABLED) {
+    console.log('📧 Email service disabled - would have sent approval email');
+    return { success: true, message: 'Email disabled for demo' };
+  }
+  
   const loginUrl = `http://localhost:5176/`
   const dashboardUrl = `http://localhost:5176/dashboard`
   
@@ -167,6 +180,11 @@ export async function sendSellerApprovalEmail(sellerData: any) {
 }
 
 export async function sendSellerRejectionEmail(sellerData: any, reason?: string) {
+  if (!EMAIL_ENABLED) {
+    console.log('📧 Email service disabled - would have sent rejection email');
+    return { success: true, message: 'Email disabled for demo' };
+  }
+  
   const contactUrl = `http://localhost:5176/contact`
   const reapplyUrl = `http://localhost:5176/signup`
   
@@ -261,6 +279,11 @@ export async function sendSellerRejectionEmail(sellerData: any, reason?: string)
 }
 
 export async function sendWelcomeEmail(sellerData: any) {
+  if (!EMAIL_ENABLED) {
+    console.log('📧 Email service disabled - would have sent welcome email');
+    return { success: true, message: 'Email disabled for demo' };
+  }
+  
   const dashboardUrl = `http://localhost:5176/`
   
   const emailContent = `

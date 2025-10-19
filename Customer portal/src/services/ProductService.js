@@ -187,7 +187,36 @@ class ProductService {
 
   // Get all products (with optional filters)
   async listProducts(filter = null, limit = 100) {
-    // Try GraphQL first, then fall back to REST if that fails or returns empty
+    // First check localStorage for seller-added products (cross-portal sync)
+    let sellerProducts = [];
+    try {
+      const localProducts = localStorage.getItem('sellerProducts');
+      if (localProducts) {
+        sellerProducts = JSON.parse(localProducts);
+        console.log(`📦 Found ${sellerProducts.length} products from Seller Portal`);
+        
+        // Transform seller products to customer format
+        sellerProducts = sellerProducts.map(p => ({
+          id: p.productId || p.id,
+          name: p.name,
+          description: p.description || '',
+          price: parseFloat(p.price) || 0,
+          images: p.imageUrl ? [p.imageUrl] : (p.images || []),
+          category: p.category || 'Uncategorized',
+          stock: parseInt(p.stock) || 0,
+          sellerId: p.sellerId || 'SELLER-001',
+          sellerName: p.sellerName || 'Third-Party Seller',
+          rating: p.rating || 4.5,
+          tags: p.tags || [],
+          isActive: true,
+          inStock: (p.stock || 0) > 0
+        }));
+      }
+    } catch (e) {
+      console.warn('Could not load seller products from localStorage:', e);
+    }
+    
+    // Try GraphQL
     try {
       const response = await client.graphql({
         query: listProductsQuery,
@@ -197,23 +226,37 @@ class ProductService {
         }
       });
       const items = response?.data?.listProducts?.items || [];
-      if (items && items.length > 0) return items;
+      if (items && items.length > 0) {
+        console.log('✅ Fetched products from GraphQL/AppSync');
+        // Merge with seller products
+        return [...sellerProducts, ...items];
+      }
     } catch (error) {
       console.warn('GraphQL listProducts failed, will try REST fallback', error);
     }
 
     // REST fallback
     try {
-      // build simple URL; optionally we could translate filter to query params
       const url = buildUrl(API_ENDPOINTS.PRODUCTS.LIST);
       const data = await restFetch(url);
-      // normalize to items array
-      if (Array.isArray(data)) return data;
-      return data.items || [];
+      const products = Array.isArray(data) ? data : (data.items || []);
+      if (products.length > 0) {
+        console.log('✅ Fetched products from REST API');
+        // Merge with seller products
+        return [...sellerProducts, ...products];
+      }
     } catch (err) {
       console.error('Error listing products via REST fallback:', err);
-      throw err;
     }
+    
+    // If we have seller products, return them even if other sources failed
+    if (sellerProducts.length > 0) {
+      console.log(`✅ Returning ${sellerProducts.length} seller products`);
+      return sellerProducts;
+    }
+    
+    // Return empty array to let mock data show
+    throw new Error('No products available from any source');
   }
 
   // Get products by seller ID
