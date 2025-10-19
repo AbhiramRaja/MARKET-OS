@@ -25,7 +25,13 @@ export default function ForgotPassword() {
       setStep('code');
     } catch (err) {
       console.error('Error sending code:', err);
-      setError(err.message || 'Failed to send verification code');
+      if (err.name === 'LimitExceededException' || err.message?.includes('Attempt limit exceeded')) {
+        setError('Too many attempts. Please wait 15 minutes before trying again.');
+      } else if (err.name === 'UserNotFoundException') {
+        setError('No account found with this email address.');
+      } else {
+        setError(err.message || 'Failed to send verification code');
+      }
     } finally {
       setLoading(false);
     }
@@ -62,10 +68,14 @@ export default function ForgotPassword() {
     } catch (err) {
       console.error('Error resetting password:', err);
       if (err.name === 'CodeMismatchException') {
-        setError('Invalid verification code');
+        setError('Invalid verification code. Please check and try again.');
       } else if (err.name === 'ExpiredCodeException') {
         setError('Verification code has expired. Please request a new one.');
         setStep('email');
+      } else if (err.name === 'LimitExceededException' || err.message?.includes('Attempt limit exceeded')) {
+        setError('Too many attempts. Please wait 15 minutes before trying again.');
+      } else if (err.name === 'InvalidPasswordException') {
+        setError('Password does not meet requirements. Use at least 8 characters with uppercase, lowercase, and numbers.');
       } else {
         setError(err.message || 'Failed to reset password');
       }
@@ -83,7 +93,11 @@ export default function ForgotPassword() {
       await resetPassword({ username: email });
       setMessage('New verification code sent!');
     } catch (err) {
-      setError(err.message || 'Failed to resend code');
+      if (err.name === 'LimitExceededException' || err.message?.includes('Attempt limit exceeded')) {
+        setError('Too many attempts. Please wait 15 minutes before trying again.');
+      } else {
+        setError(err.message || 'Failed to resend code');
+      }
     } finally {
       setLoading(false);
     }
