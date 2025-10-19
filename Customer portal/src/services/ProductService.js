@@ -1,6 +1,6 @@
 import { generateClient } from 'aws-amplify/api';
 import { API_ENDPOINTS, buildUrl, getAuthHeaders } from '../config/api';
-import { fetchAuthSession } from '@aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
 
 const client = generateClient();
 
