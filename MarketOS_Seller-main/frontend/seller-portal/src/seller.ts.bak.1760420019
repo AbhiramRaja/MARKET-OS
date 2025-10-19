@@ -1,0 +1,56 @@
+import axios from "axios";
+import { fetchAuthSession } from "aws-amplify/auth";
+
+const base = import.meta.env.VITE_API_BASE;
+
+// Auth'd axios instance
+const api = axios.create({ baseURL: base });
+api.interceptors.request.use(async (config) => {
+  try {
+    const session = await fetchAuthSession();
+    const idToken = session.tokens?.idToken?.toString();
+    if (idToken) {
+      config.headers = config.headers ?? {};
+      (config.headers as any)["Authorization"] = `Bearer ${idToken}`;
+    }
+  } catch {
+    // no-op: allow unauth'd calls to proceed if needed
+  }
+  return config;
+});
+
+export type Seller = {
+  sellerId: string;
+  name: string;
+  logo?: string;       // s3 key
+  contactEmail?: string;
+  phone?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export async function createSeller(input: Partial<Seller>) {
+  const res = await api.post(`/api/sellers`, input);
+  return res.data as Seller;
+}
+
+export async function getMySeller() {
+  const res = await api.get(`/api/sellers/me`);
+  return res.data as Seller | null;
+}
+
+export async function updateSeller(partial: Partial<Seller>) {
+  const res = await api.put(`/api/sellers/me`, partial);
+  return res.data as Seller;
+}
+
+export async function getUploadUrl(filename: string, contentType: string) {
+  const res = await api.post(`/api/upload-url`, { filename, contentType });
+  return res.data as {
+    uploadUrl: string;
+    bucket: string;
+    key: string;
+    region: string;
+    expiresIn: number;
+  };
+}

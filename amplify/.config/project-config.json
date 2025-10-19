@@ -1,0 +1,18 @@
+{
+  "whyContinueWithGen1": "Prefer not to answer",
+  "projectName": "marketoshackathon",
+  "version": "3.1",
+  "frontend": "javascript",
+  "javascript": {
+    "framework": "react",
+    "config": {
+      "SourceDir": "Customer portal/src",
+      "DistributionDir": "Customer portal/build",
+      "BuildCommand": "npm run build",
+      "StartCommand": "npm start"
+    }
+  },
+  "providers": [
+    "awscloudformation"
+  ]
+}

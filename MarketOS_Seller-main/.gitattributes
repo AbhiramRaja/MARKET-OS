@@ -1,0 +1,50 @@
+# --------------------------------------------------------
+# Line endings & encoding
+# --------------------------------------------------------
+* text=auto eol=lf
+*.sh text eol=lf
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.tsx text eol=lf
+*.jsx text eol=lf
+
+# --------------------------------------------------------
+# Treat CDK templates and CloudFormation as text
+# --------------------------------------------------------
+*.template.json text
+*.stack.json text
+cdk.out/* linguist-generated=true
+
+# --------------------------------------------------------
+# Binary assets
+# --------------------------------------------------------
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.tgz binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+
+# --------------------------------------------------------
+# Prevent merge conflicts in lock files (always use ours)
+# --------------------------------------------------------
+package-lock.json merge=ours
+yarn.lock merge=ours
+pnpm-lock.yaml merge=ours
+
+# --------------------------------------------------------
+# Normalize line endings in scripts
+# --------------------------------------------------------
+*.sh text eol=lf

@@ -1,0 +1,110 @@
+[
+    {
+        "Name": "SellerFrontendStack",
+        "Outputs": [
+            {
+                "OutputKey": "BucketName",
+                "OutputValue": "sellerfrontendstack-webbucket-duvmcdiefmvb"
+            },
+            {
+                "OutputKey": "DistributionId",
+                "OutputValue": "E1B8EZCRDJ5IOK"
+            },
+            {
+                "OutputKey": "CloudFrontDomain",
+                "OutputValue": "d2f0vr56px51as.cloudfront.net"
+            }
+        ]
+    },
+    {
+        "Name": "SellerRealtimeStack",
+        "Outputs": null
+    },
+    {
+        "Name": "SellerApiStack",
+        "Outputs": [
+            {
+                "OutputKey": "ApiBaseUrl",
+                "OutputValue": "https://ux95pk83o4.execute-api.ap-south-1.amazonaws.com/prod/"
+            },
+            {
+                "OutputKey": "SellerApiEndpoint4037A7BF",
+                "OutputValue": "https://ux95pk83o4.execute-api.ap-south-1.amazonaws.com/prod/"
+            }
+        ]
+    },
+    {
+        "Name": "SellerStorageStack",
+        "Outputs": [
+            {
+                "OutputKey": "ExportsOutputRefProductsTable241ADBFF4DFBD40D",
+                "OutputValue": "marketos_products",
+                "ExportName": "SellerStorageStack:ExportsOutputRefProductsTable241ADBFF4DFBD40D"
+            },
+            {
+                "OutputKey": "AssetBucketName",
+                "OutputValue": "marketos-seller-assets-387686289729-ap-south-1"
+            },
+            {
+                "OutputKey": "ExportsOutputFnGetAttOrdersTable315BB997ArnB3A07C42",
+                "OutputValue": "arn:aws:dynamodb:ap-south-1:387686289729:table/marketos_orders",
+                "ExportName": "SellerStorageStack:ExportsOutputFnGetAttOrdersTable315BB997ArnB3A07C42"
+            },
+            {
+                "OutputKey": "ExportsOutputRefOrdersTable315BB997F7C1D27E",
+                "OutputValue": "marketos_orders",
+                "ExportName": "SellerStorageStack:ExportsOutputRefOrdersTable315BB997F7C1D27E"
+            },
+            {
+                "OutputKey": "OrdersTableName",
+                "OutputValue": "marketos_orders"
+            },
+            {
+                "OutputKey": "ExportsOutputFnGetAttOrdersTable315BB997StreamArnE8647DC2",
+                "OutputValue": "arn:aws:dynamodb:ap-south-1:387686289729:table/marketos_orders/stream/2025-10-13T10:46:57.071",
+                "ExportName": "SellerStorageStack:ExportsOutputFnGetAttOrdersTable315BB997StreamArnE8647DC2"
+            },
+            {
+                "OutputKey": "ProductsTableName",
+                "OutputValue": "marketos_products"
+            },
+            {
+                "OutputKey": "ExportsOutputRefSellerAssetBucketCA455B7AFE60E979",
+                "OutputValue": "marketos-seller-assets-387686289729-ap-south-1",
+                "ExportName": "SellerStorageStack:ExportsOutputRefSellerAssetBucketCA455B7AFE60E979"
+            },
+            {
+                "OutputKey": "SellersTableName",
+                "OutputValue": "marketos_sellers"
+            },
+            {
+                "OutputKey": "ExportsOutputFnGetAttProductsTable241ADBFFArn55D06E2D",
+                "OutputValue": "arn:aws:dynamodb:ap-south-1:387686289729:table/marketos_products",
+                "ExportName": "SellerStorageStack:ExportsOutputFnGetAttProductsTable241ADBFFArn55D06E2D"
+            },
+            {
+                "OutputKey": "ExportsOutputFnGetAttSellerAssetBucketCA455B7AArnA8E08097",
+                "OutputValue": "arn:aws:s3:::marketos-seller-assets-387686289729-ap-south-1",
+                "ExportName": "SellerStorageStack:ExportsOutputFnGetAttSellerAssetBucketCA455B7AArnA8E08097"
+            }
+        ]
+    },
+    {
+        "Name": "SellerAuthStack",
+        "Outputs": [
+            {
+                "OutputKey": "UserPoolClientId",
+                "OutputValue": "ae27uf3rk6k3pqrr04go6c7h4"
+            },
+            {
+                "OutputKey": "UserPoolId",
+                "OutputValue": "ap-south-1_d0s99txNQ"
+            },
+            {
+                "OutputKey": "ExportsOutputFnGetAttSellerUserPoolE4741337Arn28A94E09",
+                "OutputValue": "arn:aws:cognito-idp:ap-south-1:387686289729:userpool/ap-south-1_d0s99txNQ",
+                "ExportName": "SellerAuthStack:ExportsOutputFnGetAttSellerUserPoolE4741337Arn28A94E09"
+            }
+        ]
+    }
+]

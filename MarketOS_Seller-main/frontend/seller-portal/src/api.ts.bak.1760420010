@@ -1,0 +1,93 @@
+import axios from 'axios';
+import { fetchAuthSession } from 'aws-amplify/auth';
+
+const base = import.meta.env.VITE_API_BASE;
+
+// Basic Product type (expand as your backend grows)
+export type Product = {
+  productId: string;
+  sellerId: string;
+  name: string;
+  price: number;
+  images?: string[];
+  inventoryQty?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+// axios instance with JWT
+const api = axios.create({ baseURL: base });
+api.interceptors.request.use(async (config) => {
+  try {
+    const { tokens } = await fetchAuthSession();
+    const idToken = tokens?.idToken?.toString();
+    if (idToken) {
+      config.headers = config.headers ?? {};
+      (config.headers as any)['Authorization'] = `Bearer ${idToken}`;
+    }
+  } catch {}
+  return config;
+});
+
+export async function listProducts() {
+  const res = await api.get('/api/products');
+  return res.data as Product[];
+}
+
+export async function listOrders() {
+  const res = await api.get('/api/orders');
+  return res.data;
+}
+
+export async function createProduct(p: Partial<Product>) {
+  const res = await api.post('/api/products', p);
+  return res.data as Product;
+}
+
+export async function deleteProduct(id: string) {
+  const res = await api.delete(`/api/products/${id}`);
+  return res.data;
+}
+
+export async function getUploadUrl(filename: string, contentType: string) {
+  const res = await api.post('/api/upload-url', { filename, contentType });
+  return res.data as {
+    uploadUrl: string;
+    bucket: string;
+    key: string;
+    region: string;
+    expiresIn: number;
+  };
+}
+
+export async function updateOrderStatus(id: string, status: string) {
+  const res = await api.put(`/api/orders/${id}`, { status });
+  return res.data;
+}
+
+/** Implemented properly to avoid TS 'unused' + wire up UI needs */
+export async function updateProduct(id: string, data: Partial<Product>) {
+  const res = await api.put(`/api/products/${id}`, data);
+  return res.data as Product;
+}
+
+// ---- Sellers ----
+export async function getMySeller() {
+  const res = await api.get('/api/sellers/me');
+  return res.data;
+}
+
+export async function createSeller(p: { name?: string; sellerId?: string; logo?: string }) {
+  const res = await api.post('/api/sellers', p);
+  return res.data;
+}
+
+export async function getSeller(id: string) {
+  const res = await api.get(`/api/sellers/${id}`);
+  return res.data;
+}
+
+export async function updateSeller(id: string, p: { name?: string; logo?: string }) {
+  const res = await api.put(`/api/sellers/${id}`, p);
+  return res.data;
+}

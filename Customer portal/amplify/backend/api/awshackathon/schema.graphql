@@ -1,0 +1,97 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Todo @model {
+  id: ID!
+  name: String!
+  description: String
+}
+
+# Visual Search Types
+type VisualSearchLabel {
+  name: String!
+  confidence: Float!
+}
+
+type VisualSearchProduct {
+  id: ID!
+  name: String!
+  price: Float!
+  image: String!
+  category: String!
+  rating: Float
+  tags: [String!]!
+  matchCount: Int
+  confidence: Float
+}
+
+type VisualSearchResult {
+  success: Boolean!
+  results: [VisualSearchProduct!]!
+  detectedLabels: [VisualSearchLabel!]!
+  totalMatches: Int!
+  confidence_threshold: Float!
+}
+
+# Order Management Types
+type Order @model {
+  id: ID!
+  userId: String
+  customerName: String!
+  customerEmail: String!
+  customerPhone: String!
+  items: [OrderItem!]!
+  shippingAddress: ShippingAddress!
+  subtotal: Float!
+  deliveryFee: Float!
+  total: Float!
+  paymentMethod: String!
+  deliveryType: String!
+  status: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type OrderItem {
+  id: ID!
+  productId: ID!
+  name: String!
+  price: Float!
+  quantity: Int!
+  image: String
+}
+
+type ShippingAddress {
+  fullName: String!
+  phone: String!
+  addressLine1: String!
+  addressLine2: String
+  city: String!
+  state: String!
+  pincode: String!
+}
+
+# Product Management Types
+type Product @model {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  images: [String!]!
+  category: String
+  stock: Int
+  sellerId: String!
+  sellerName: String
+  rating: Float
+  tags: [String!]
+  isActive: Boolean
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Visual Search Mutation with Lambda resolver
+type Mutation {
+  analyzeImage(image: String!): VisualSearchResult 
+    @function(name: "awshackathon7a367bce-${env}")
+}

@@ -1,0 +1,30 @@
+type OrderUpdate {
+  orderId: ID!
+  sellerId: String!
+  status: String!
+  updatedAt: AWSDateTime!
+}
+
+type Query {
+  _health: String
+}
+
+type Mutation {
+  publishOrderUpdate(
+    orderId: ID!
+    sellerId: String!
+    status: String!
+    updatedAt: AWSDateTime!
+  ): OrderUpdate
+}
+
+type Subscription {
+  onOrderStatusChange(sellerId: String!): OrderUpdate
+    @aws_subscribe(mutations: ["publishOrderUpdate"])
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}

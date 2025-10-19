@@ -1,0 +1,57 @@
+import { useEffect, useState } from 'react';
+import { subscribeOrders, type Order, type RealtimeMode } from './lib/realtime';
+
+export default function Orders() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [mode, setMode] = useState<RealtimeMode>('poll');
+  const sellerId = import.meta.env.VITE_SELLER_ID || 'SELLER_DEMO';
+
+  useEffect(() => {
+    const unsub = subscribeOrders(
+      sellerId,
+      (update) => {
+        setOrders((prev) => {
+          const i = prev.findIndex((o) => o.orderId === update.orderId);
+          if (i >= 0) { const copy = [...prev]; copy[i] = { ...copy[i], ...update }; return copy; }
+          return [update, ...prev];
+        });
+        console.debug('Order update (ws/poll):', update);
+      },
+      (m) => setMode(m)
+    );
+    return () => unsub();
+  }, [sellerId]);
+
+  const badge = (
+    <span
+      className={`text-xs px-2 py-1 rounded ${
+        mode === 'ws' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+      }`}
+      title={mode === 'ws' ? 'WebSocket connected' : 'Polling fallback'}
+    >
+      {mode === 'ws' ? 'WS' : 'POLL'}
+    </span>
+  );
+
+  return (
+    <div className="p-6 space-y-4">
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-semibold">Orders</h1>
+        {badge}
+      </div>
+      {orders.length === 0 ? (
+        <div className="text-sm text-gray-600">No orders yet. Waiting for updates…</div>
+      ) : (
+        <div className="space-y-2">
+          {orders.map((o) => (
+            <div key={o.orderId} className="border rounded p-3">
+              <div className="font-medium">#{o.orderId}</div>
+              <div className="text-sm">Status: {o.status}</div>
+              {o.updatedAt && <div className="text-xs text-gray-500">Updated: {o.updatedAt}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

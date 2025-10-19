@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-marketoshackathon-dev-6e48c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::387686289729:role/amplify-marketoshackathon-dev-6e48c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::387686289729:role/amplify-marketoshackathon-dev-6e48c-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-marketoshackathon-dev-6e48c-deployment",
+      "UnauthRoleName": "amplify-marketoshackathon-dev-6e48c-unauthRole",
+      "StackName": "amplify-marketoshackathon-dev-6e48c",
+      "StackId": "arn:aws:cloudformation:ap-south-1:387686289729:stack/amplify-marketoshackathon-dev-6e48c/8c964540-ac68-11f0-8fb4-0640a0904f61",
+      "AmplifyAppId": "djynh89nornpz"
+    },
+    "categories": {
+      "api": {
+        "marketoshackathon": {}
+      },
+      "auth": {
+        "marketoshackathon08c07fe7": {}
+      }
+    }
+  }
+}

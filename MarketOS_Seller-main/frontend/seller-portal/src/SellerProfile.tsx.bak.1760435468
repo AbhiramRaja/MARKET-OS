@@ -1,0 +1,129 @@
+import { useEffect, useState } from 'react';
+import { getMySeller, createSeller, updateSeller, type Seller } from './api/sellers';
+
+export default function SellerProfile() {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [existing, setExisting] = useState<Seller | null>(null);
+  const [form, setForm] = useState<Seller>({
+    sellerId: import.meta.env.VITE_SELLER_ID || 'SELLER_DEMO',
+    businessName: '',
+    email: '',
+    phone: '',
+    sellerType: 'online',
+    taxId: '',
+  });
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const me = await getMySeller();
+        setExisting(me);
+        setForm(me);
+      } catch (e: any) {
+        // If 404 (no seller yet), we allow create form; anything else surfaces as error text.
+        const status = e?.response?.status;
+        if (status !== 404) setError(e?.message || 'Failed to load');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  const onSave = async () => {
+    setError(null);
+    try {
+      if (!existing) {
+        const created = await createSeller(form);
+        setExisting(created);
+        setForm(created);
+        alert('Seller created');
+      } else {
+        const updated = await updateSeller(form.sellerId, form);
+        setExisting(updated);
+        setForm(updated);
+        alert('Seller updated');
+      }
+    } catch (e: any) {
+      setError(e?.message || 'Save failed');
+    }
+  };
+
+  return (
+    <div className="p-6 space-y-3">
+      <h2 className="text-xl font-bold mb-3">Seller Profile</h2>
+      {loading && <div>Loading…</div>}
+      {!loading && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <label className="flex flex-col gap-1">
+              <span className="text-sm">Seller ID</span>
+              <input className="border p-2 rounded" value={form.sellerId} disabled />
+            </label>
+
+            <label className="flex flex-col gap-1">
+              <span className="text-sm">Name *</span>
+              <input
+                className="border p-2 rounded"
+                value={form.businessName}
+                onChange={(e) => setForm({ ...form, businessName: e.target.value })}
+              />
+            </label>
+
+            <label className="flex flex-col gap-1">
+              <span className="text-sm">Contact Email</span>
+              <input
+                className="border p-2 rounded"
+                value={form.email ?? ''}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+              />
+            </label>
+
+            <label className="flex flex-col gap-1">
+              <span className="text-sm">Phone</span>
+              <input
+                className="border p-2 rounded"
+                value={form.phone ?? ''}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              />
+            </label>
+
+            <label className="flex flex-col gap-1">
+              <span className="text-sm">Seller Type</span>
+              <select
+                className="border p-2 rounded"
+                value={form.sellerType ?? 'online'}
+                onChange={(e) => setForm({ ...form, sellerType: e.target.value as Seller['sellerType'] })}
+              >
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+              </select>
+            </label>
+
+            <label className="flex flex-col gap-1">
+              <span className="text-sm">Tax ID</span>
+              <input
+                className="border p-2 rounded"
+                value={form.taxId ?? ''}
+                onChange={(e) => setForm({ ...form, taxId: e.target.value })}
+              />
+            </label>
+          </div>
+
+          <div className="pt-2 flex items-center gap-3">
+            <button
+              className="bg-black text-white px-4 py-2 rounded disabled:opacity-50"
+              onClick={onSave}
+              disabled={!form.businessName?.trim()}
+            >
+              {existing ? 'Update Seller' : 'Create Seller'}
+            </button>
+            {error && <span className="text-red-600 text-sm">Request failed: {error}</span>}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}

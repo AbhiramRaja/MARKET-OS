@@ -1,0 +1,98 @@
+import { useEffect, useMemo, useState } from "react";
+import { gql, useSubscription } from "@apollo/client";
+import { listOrders, updateOrderStatus } from "./api";
+
+type Order = {
+  orderId: string;
+  sellerId: string;
+  status: string;
+  buyerName?: string;
+  total?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  items?: Array<{ productId: string; price: number; qty: number }>;
+};
+
+const ON_ORDER_STATUS_CHANGE = gql`
+  subscription OnOrderStatusChange($sellerId: String!) {
+    onOrderStatusChange(sellerId: $sellerId) {
+      orderId
+      sellerId
+      status
+      updatedAt
+    }
+  }
+`;
+
+export default function Orders() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // initial load via REST (JWT attached by axios interceptor)
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    listOrders()
+      .then((data) => {
+        if (!cancelled) setOrders(data as Order[]);
+      })
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Determine sellerId for the subscription
+  const sellerIdForSub = useMemo(() => {
+    return orders[0]?.sellerId || import.meta.env.VITE_SELLER_ID || undefined;
+  }, [orders]);
+
+  // Live updates (AppSync via Cognito). Skip until we know sellerId.
+  const { data: subData } = useSubscription<any>(ON_ORDER_STATUS_CHANGE, {
+    variables: sellerIdForSub ? { sellerId: sellerIdForSub } : undefined,
+    skip: !sellerIdForSub,
+  });
+
+  // Apply live updates to local state
+  useEffect(() => {
+    const ev = subData?.onOrderStatusChange;
+    if (!ev?.orderId) return;
+    setOrders((prev) =>
+      prev.map((o) => (o.orderId === ev.orderId ? { ...o, status: ev.status, updatedAt: ev.updatedAt } : o))
+    );
+  }, [subData]);
+
+  const advance = async (o: Order) => {
+    // simple demo: PENDING -> SHIPPED -> DELIVERED
+    const next =
+      o.status === "PENDING" ? "SHIPPED" : o.status === "SHIPPED" ? "DELIVERED" : "DELIVERED";
+    await updateOrderStatus(o.orderId, next);
+    // REST will update DB; realtime sub will reflect change; we also optimistically update:
+    setOrders((prev) => prev.map((x) => (x.orderId === o.orderId ? { ...x, status: next } : x)));
+  };
+
+  if (loading && orders.length === 0) return <div>Loading orders…</div>;
+  if (!orders.length) return <div>No orders yet.</div>;
+
+  return (
+    <div className="p-4 space-y-3">
+      {orders.map((o) => (
+        <div key={o.orderId} className="border rounded-xl p-3 flex items-center justify-between">
+          <div>
+            <div className="font-semibold">{o.buyerName ?? "Order"}</div>
+            <div className="text-sm text-gray-500">
+              #{o.orderId} • {o.status} • ₹{o.total}
+            </div>
+          </div>
+          <button
+            onClick={() => advance(o)}
+            className="px-3 py-1 rounded-lg bg-black text-white disabled:opacity-50"
+            disabled={o.status === "DELIVERED"}
+          >
+            Advance Status
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}

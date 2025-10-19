@@ -1,0 +1,34 @@
+import { useState } from 'react';
+import Products from './Products';
+import Orders from './Orders';
+import SellerProfile from './SellerProfile';
+
+export default function App() {
+  // Added "seller" to the union type
+  const [tab, setTab] = useState<'orders' | 'products' | 'seller'>('orders');
+
+  return (
+    <div className="container">
+      <h1>Seller Portal</h1>
+
+      <div className="row" style={{ marginBottom: '1rem' }}>
+        <button onClick={() => setTab('orders')} disabled={tab === 'orders'}>
+          Orders
+        </button>
+        <button onClick={() => setTab('products')} disabled={tab === 'products'}>
+          Products
+        </button>
+        <button onClick={() => setTab('seller')} disabled={tab === 'seller'}>
+          Seller
+        </button>
+        <span className="badge">
+          Seller: {import.meta.env.VITE_SELLER_ID || '—'}
+        </span>
+      </div>
+
+      {tab === 'orders' && <Orders />}
+      {tab === 'products' && <Products />}
+      {tab === 'seller' && <SellerProfile />}
+    </div>
+  );
+}
