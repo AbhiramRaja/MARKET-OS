@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3001'
+const API_BASE = 'https://market-os-rker.onrender.com'
 
 export interface Seller {
   id: string

@@ -20,7 +20,7 @@ export default function PendingVerifications() {
 
   async function loadRequests() {
     try {
-      const response = await fetch('http://localhost:3001/admin/pending-verifications')
+      const response = await fetch('https://market-os-rker.onrender.com/admin/pending-verifications')
       const data = await response.json()
       setRequests(data)
     } catch (error) {
@@ -32,7 +32,7 @@ export default function PendingVerifications() {
 
   const handleAction = async (sellerId: string, action: 'approve' | 'reject') => {
     try {
-      const response = await fetch(`http://localhost:3001/admin/verify-seller/${sellerId}`, {
+      const response = await fetch(`https://market-os-rker.onrender.com/admin/verify-seller/${sellerId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
