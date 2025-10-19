@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { API_BASE_URL } from '../config/api'
 import { getSavedSeller } from '../lib/seller-bus'
 
 interface Props {
@@ -20,7 +21,7 @@ export default function AddProductModal({ onClose, onSuccess }: Props) {
     e.preventDefault()
     
     try {
-      await fetch('http://localhost:3001/products', {
+      await fetch(`${API_BASE_URL}/products`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

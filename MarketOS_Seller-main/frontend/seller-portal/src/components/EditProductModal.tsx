@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { API_BASE_URL } from '../config/api'
 
 interface Product {
   productId: string
@@ -28,7 +29,7 @@ export default function EditProductModal({ product, onClose, onSuccess }: Props)
     e.preventDefault()
     
     try {
-      await fetch(`http://localhost:3001/products/${product.productId}`, {
+      await fetch(`${API_BASE_URL}/products/${product.productId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

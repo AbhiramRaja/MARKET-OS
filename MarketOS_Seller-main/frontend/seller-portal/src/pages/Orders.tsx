@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getSavedSeller } from '../lib/seller-bus'
+import { API_BASE_URL } from '../config/api'
 
 interface Order {
   orderId: string
@@ -23,7 +24,7 @@ export default function Orders() {
 
   async function loadOrders() {
     try {
-      const response = await fetch(`http://localhost:3001/orders/seller/${seller.sellerId}`)
+      const response = await fetch(`${API_BASE_URL}/orders/seller/${seller.sellerId}`)
       const data = await response.json()
       setOrders(data.sort((a: Order, b: Order) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()))
     } catch (error) {
@@ -35,7 +36,7 @@ export default function Orders() {
 
   async function updateOrderStatus(orderId: string, newStatus: string) {
     try {
-      await fetch(`http://localhost:3001/orders/${orderId}/status`, {
+      await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { getSavedSeller } from '../lib/seller-bus'
+import { API_BASE_URL } from '../config/api'
 
 interface Product {
   productId: string
@@ -182,7 +183,7 @@ export default function Products() {
 
       // Also try to save to backend if available
       try {
-        await fetch('http://localhost:3001/products', {
+        await fetch(`${API_BASE_URL}/products`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

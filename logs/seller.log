@@ -9,3 +9,62 @@
   ➜  Network: use --host to expose
 12:44:49 AM [vite] .env changed, restarting server...
 12:44:49 AM [vite] server restarted.
+3:01:16 AM [vite] Internal server error: Failed to resolve import "../api/seller" from "src/pages/Dashboard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboard.tsx:2:25
+  1  |  import { useState, useEffect } from "react";
+  2  |  import { getStats } from "../api/seller";
+     |                            ^
+  3  |  var _jsxFileName = "/Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboa...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+      at TransformPluginContext._formatLog (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:30456:43)
+      at TransformPluginContext.error (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:30453:14)
+      at normalizeUrl (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:28865:18)
+      at async file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:28923:32
+      at async Promise.all (index 1)
+      at async TransformPluginContext.transform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:28891:4)
+      at async EnvironmentPluginContainer.transform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:30246:14)
+      at async loadAndTransform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:25261:26)
+3:01:16 AM [vite] (client) Pre-transform error: Failed to resolve import "../api/seller" from "src/pages/Dashboard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboard.tsx:2:25
+  1  |  import { useState, useEffect } from "react";
+  2  |  import { getStats } from "../api/seller";
+     |                            ^
+  3  |  var _jsxFileName = "/Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboa...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+3:01:16 AM [vite] (client) Pre-transform error: Failed to resolve import "../api/seller" from "src/pages/Dashboard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboard.tsx:2:25
+  1  |  import { useState, useEffect } from "react";
+  2  |  import { getStats } from "../api/seller";
+     |                            ^
+  3  |  var _jsxFileName = "/Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboa...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+3:01:20 AM [vite] (client) hmr update /src/index.css
+3:01:21 AM [vite] (client) Pre-transform error: Failed to resolve import "../api/seller" from "src/pages/Dashboard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboard.tsx:2:25
+  1  |  import { useState, useEffect } from "react";
+  2  |  import { getStats } from "../api/seller";
+     |                            ^
+  3  |  var _jsxFileName = "/Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboa...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+3:01:21 AM [vite] Internal server error: Failed to resolve import "../api/seller" from "src/pages/Dashboard.tsx". Does the file exist?
+  Plugin: vite:import-analysis
+  File: /Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboard.tsx:2:25
+  1  |  import { useState, useEffect } from "react";
+  2  |  import { getStats } from "../api/seller";
+     |                            ^
+  3  |  var _jsxFileName = "/Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/src/pages/Dashboa...
+  4  |  import { jsxDEV as _jsxDEV } from "react/jsx-dev-runtime";
+      at TransformPluginContext._formatLog (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:30456:43)
+      at TransformPluginContext.error (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:30453:14)
+      at normalizeUrl (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:28865:18)
+      at async file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:28923:32
+      at async Promise.all (index 1)
+      at async TransformPluginContext.transform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:28891:4)
+      at async EnvironmentPluginContainer.transform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:30246:14)
+      at async loadAndTransform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:25261:26)
+3:02:21 AM [vite] (client) hmr update /src/index.css
+3:02:36 AM [vite] (client) hmr update /src/App.tsx, /src/index.css

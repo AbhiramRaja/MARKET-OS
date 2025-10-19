@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { signUp, confirmSignUp, autoSignIn } from "aws-amplify/auth";
+import { API_BASE_URL } from "../config/api";
 
 interface SignUpPageProps {
   onSwitchToSignIn: () => void;
@@ -356,7 +357,7 @@ export default function SignUpPage({ onSwitchToSignIn }: SignUpPageProps) {
         localStorage.setItem('documentsSubmitted', 'false');
         
         // Create seller in backend (DynamoDB)
-        await fetch('http://localhost:3001/sellers', {
+        await fetch(`${API_BASE_URL}/sellers`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(sellerData)

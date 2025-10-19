@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getStats } from '../api/seller'
+// import { getStats } from '../api/seller'
 
 type Page = 'dashboard' | 'orders' | 'products' | 'documents' | 'analytics' | 'inventory' | 'locations' | 'settings'
 

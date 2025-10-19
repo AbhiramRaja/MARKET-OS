@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { signIn, resetPassword, confirmResetPassword } from "aws-amplify/auth";
+import { API_BASE_URL } from "../config/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -29,7 +30,7 @@ export default function LoginPage() {
       
       // Fetch seller data from backend
       try {
-        const response = await fetch(`http://localhost:3001/sellers/email/${encodeURIComponent(email)}`);
+        const response = await fetch(`${API_BASE_URL}/sellers/email/${encodeURIComponent(email)}`);
         if (response.ok) {
           const sellerData = await response.json();
           
