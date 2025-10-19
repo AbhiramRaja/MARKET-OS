@@ -20,6 +20,33 @@ const TABLES = {
 
 console.log('📊 Connected to DynamoDB');
 
+// Root route - Health check
+app.get('/', (req, res) => {
+  res.json({
+    service: 'MarketOS Seller Service',
+    status: 'running',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      sellers: '/sellers',
+      products: '/products/seller/:sellerId',
+      orders: '/orders/seller/:sellerId',
+      analytics: '/analytics/seller/:sellerId',
+      admin: '/admin/stats',
+      health: '/health'
+    }
+  });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.get('/sellers', async (req, res) => {
   try {
     const result = await dynamoDB.send(new ScanCommand({ TableName: TABLES.SELLERS }));

@@ -68,3 +68,12 @@
       at async loadAndTransform (file:///Users/abhi/Documents/AWS-HACKATHON/MarketOS_Seller-main/frontend/seller-portal/node_modules/vite/dist/node/chunks/dep-ySrR9pW8.js:25261:26)
 3:02:21 AM [vite] (client) hmr update /src/index.css
 3:02:36 AM [vite] (client) hmr update /src/App.tsx, /src/index.css
+4:00:18 AM [vite] (client) hmr update /src/pages/Products.tsx, /src/index.css
+4:00:18 AM [vite] (client) hmr update /src/pages/Dashboard.tsx, /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/auth/SignUpPage.tsx, /src/auth/LoginPage.tsx, /src/pages/Orders.tsx, /src/pages/Products.tsx, /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/auth/LoginPage.tsx, /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/auth/SignUpPage.tsx, /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/pages/Orders.tsx, /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/index.css
+4:00:19 AM [vite] (client) hmr update /src/pages/Orders.tsx, /src/index.css
