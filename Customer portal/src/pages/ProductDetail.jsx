@@ -87,317 +87,267 @@ export default function ProductDetail() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50">
+    <div className="min-h-screen bg-white">
       {/* Toast Notification */}
       {showAddedToast && (
         <div className="fixed top-20 right-6 z-50 animate-slide-in-right">
-          <div className="bg-green-500 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center space-x-3">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-green-600 text-white px-6 py-3 rounded shadow-lg flex items-center space-x-3">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
-            <span className="font-medium">Added to cart successfully!</span>
+            <span className="font-medium">Added to Cart</span>
           </div>
         </div>
       )}
 
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
+      <div className="container mx-auto px-4 py-4 max-w-7xl">
         {/* Breadcrumb */}
-        <nav className="mb-8">
-          <div className="flex items-center space-x-2 text-sm">
-            <Link to="/" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">Home</Link>
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            <Link to="/search" className="text-gray-600 hover:text-purple-600 transition-colors font-medium">{product.category || 'Products'}</Link>
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-            <span className="text-gray-900 font-semibold">{product.name}</span>
+        <nav className="mb-4">
+          <div className="flex items-center space-x-2 text-xs">
+            <Link to="/" className="text-blue-600 hover:text-orange-600 hover:underline">Home</Link>
+            <span className="text-gray-400">›</span>
+            <Link to="/search" className="text-blue-600 hover:text-orange-600 hover:underline">{product.category || 'Products'}</Link>
+            <span className="text-gray-400">›</span>
+            <span className="text-gray-700">{product.name}</span>
           </div>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-          {/* Image Gallery */}
-          <div>
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden sticky top-6">
-              {/* Badge Overlay */}
-              <div className="absolute top-6 left-6 z-10 flex flex-col gap-2">
-                {product.discount && (
-                  <span className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
-                    {product.discount}% OFF
-                  </span>
-                )}
-                {product.isBestSeller && (
-                  <span className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
-                    ⚡ BESTSELLER
-                  </span>
-                )}
-              </div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          {/* Image Gallery - Left Column */}
+          <div className="lg:col-span-5">
+            <div className="sticky top-4">
               {/* Main Image */}
-              <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-gray-100 p-12">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-9xl filter drop-shadow-2xl transform hover:scale-110 transition-transform duration-300">
+              <div className="bg-white border border-gray-200 rounded-lg p-8 mb-4">
+                <div className="aspect-square flex items-center justify-center">
+                  <div className="text-9xl">
                     {productImages[selectedImage]}
                   </div>
                 </div>
-                
-                {/* Image Navigation Arrows */}
-                {selectedImage > 0 && (
-                  <button
-                    onClick={() => setSelectedImage(selectedImage - 1)}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all hover:scale-110"
-                  >
-                    <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
-                )}
-                {selectedImage < productImages.length - 1 && (
-                  <button
-                    onClick={() => setSelectedImage(selectedImage + 1)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all hover:scale-110"
-                  >
-                    <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                )}
               </div>
               
               {/* Thumbnail Images */}
-              <div className="p-6 bg-white">
-                <div className="flex gap-3 justify-center">
-                  {productImages.map((img, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImage(index)}
-                      className={`w-20 h-20 rounded-xl border-2 flex items-center justify-center text-3xl transition-all transform hover:scale-110 ${
-                        selectedImage === index 
-                          ? 'border-purple-600 bg-purple-50 shadow-lg scale-110' 
-                          : 'border-gray-200 bg-gray-50 hover:border-purple-300'
-                      }`}
-                    >
-                      {img}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex gap-2">
+                {productImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`w-16 h-16 border rounded flex items-center justify-center text-2xl transition-all ${
+                      selectedImage === index 
+                        ? 'border-orange-500 border-2' 
+                        : 'border-gray-300 hover:border-gray-400'
+                    }`}
+                  >
+                    {img}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* Product Info */}
-          <div>
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-              <div className="p-8">
-                {/* Product Title */}
-                <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">
-                  {product.name}
-                </h1>
+          {/* Product Info - Middle Column */}
+          <div className="lg:col-span-4">
+            {/* Product Title */}
+            <h1 className="text-2xl font-normal text-gray-900 mb-2">
+              {product.name}
+            </h1>
 
-                {/* Rating & Reviews */}
-                <div className="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
-                  <div className="flex items-center bg-green-50 px-3 py-1.5 rounded-lg">
-                    <span className="text-yellow-500 text-xl mr-1">★</span>
-                    <span className="font-bold text-gray-900">4.2</span>
-                  </div>
+            {/* Brand */}
+            <div className="mb-3">
+              <span className="text-sm text-blue-600 hover:text-orange-600 hover:underline cursor-pointer">
+                Brand: {product.brand || 'MarketOS'}
+              </span>
+            </div>
+
+            {/* Rating */}
+            <div className="flex items-center gap-4 mb-4 pb-4 border-b">
+              <div className="flex items-center gap-1">
+                <span className="text-sm font-medium">4.2</span>
+                <div className="flex text-orange-400">
+                  <span>★★★★</span><span className="text-gray-300">★</span>
+                </div>
+              </div>
+              <span className="text-sm text-blue-600 hover:underline cursor-pointer">42,877 ratings</span>
+            </div>
+
+            {/* Badge */}
+            {product.discount && product.discount > 30 && (
+              <div className="mb-4">
+                <span className="bg-red-700 text-white text-xs px-2 py-0.5 rounded">Amazon's Choice</span>
+              </span>
+              <span className="text-xs text-gray-600 ml-2">for "{product.category}"</span>
+            </div>
+            )}
+
+            {/* Popularity */}
+            <div className="mb-4 text-sm">
+              <span className="font-medium">3K+ bought</span> in past month
+            </div>
+
+            {/* Price */}
+            <div className="mb-4 bg-gray-50 p-4 rounded border border-gray-200">
+              {product.discount && (
+                <div className="mb-2">
+                  <span className="bg-red-600 text-white px-2 py-1 text-xs font-bold rounded">
+                    Great Indian Festival
+                  </span>
+                </div>
+              )}
+              <div className="flex items-baseline gap-2 mb-1">
+                <span className="text-red-700 text-sm">-{product.discount}%</span>
+                <span className="text-3xl font-normal">₹{product.price.toLocaleString('en-IN')}</span>
+              </div>
+              {product.originalPrice && (
+                <>
                   <div className="text-sm text-gray-600">
-                    <span className="font-medium">89 ratings</span>
-                    <span className="mx-2">•</span>
-                    <span className="font-medium">45 reviews</span>
+                    M.R.P.: <span className="line-through">₹{product.originalPrice.toLocaleString('en-IN')}</span>
                   </div>
-                  <div className="ml-auto">
-                    <StockBadge stock={stock} />
-                  </div>
-                </div>
+                  <div className="text-xs text-gray-600 mt-1">Inclusive of all taxes</div>
+                </>
+              )}
+            </div>
 
-                {/* Pricing */}
-                <div className="mb-8">
-                  <div className="flex items-baseline gap-3 mb-2">
-                    <span className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      ₹{product.price.toLocaleString('en-IN')}
-                    </span>
-                    {product.originalPrice && (
-                      <>
-                        <span className="text-xl text-gray-400 line-through">
-                          ₹{product.originalPrice.toLocaleString('en-IN')}
-                        </span>
-                        {product.discount && (
-                          <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
-                            Save {product.discount}%
-                          </span>
-                        )}
-                      </>
-                    )}
-                  </div>
-                  {product.originalPrice && (
-                    <p className="text-sm text-green-600 font-semibold flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      You save ₹{(product.originalPrice - product.price).toLocaleString('en-IN')}
-                    </p>
-                  )}
+            {/* Offers */}
+            <div className="mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-orange-600">💰</span>
+                <span className="font-semibold text-sm">Offers</span>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div className="border border-gray-300 rounded p-3 text-xs">
+                  <div className="font-semibold mb-1">Bank Offer</div>
+                  <div className="text-gray-600">Upto ₹3,000.00 discount on select Credit Cards, HDFC...</div>
                 </div>
-
-                {/* Key Features */}
-                <div className="mb-8 p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-100">
-                  <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                    <span className="text-purple-600">✨</span>
-                    Key Highlights
-                  </h3>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start gap-2">
-                      <span className="text-purple-600 mt-0.5">✓</span>
-                      <span className="text-gray-700">Premium quality materials</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-purple-600 mt-0.5">✓</span>
-                      <span className="text-gray-700">Fast local delivery available</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-purple-600 mt-0.5">✓</span>
-                      <span className="text-gray-700">7 days easy return policy</span>
-                    </li>
-                  </ul>
+                <div className="border border-gray-300 rounded p-3 text-xs">
+                  <div className="font-semibold mb-1">Cashback</div>
+                  <div className="text-gray-600">Upto ₹19.00 cashback as Amazon Pay Balance when...</div>
                 </div>
+              </div>
+            </div>
 
-                {/* Seller Info */}
-                <div className="mb-8 p-5 bg-gray-50 rounded-xl border border-gray-200">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center text-white text-xl font-bold">
-                        🏪
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900">Local Electronics Store</h4>
-                        <div className="flex items-center gap-2 text-xs text-gray-600">
-                          <span className="flex items-center gap-1">
-                            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                            1.2 km away
-                          </span>
-                          <span>•</span>
-                          <span className="flex items-center gap-1">
-                            <span className="text-yellow-500">★</span>
-                            4.3 rating
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <button className="text-purple-600 text-sm font-semibold hover:text-purple-700">
-                      View Store →
-                    </button>
-                  </div>
+            {/* Key Features */}
+            <div className="mb-4">
+              <h3 className="font-semibold mb-2 text-sm">About this item</h3>
+              <ul className="space-y-1 text-sm">
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 w-1 h-1 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>Wireless Mouse with 2.4GHz connectivity</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 w-1 h-1 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>Silent buttons for quiet operation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 w-1 h-1 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>1000 DPI optical tracking</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 w-1 h-1 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>18-month battery life</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-1.5 w-1 h-1 bg-gray-600 rounded-full flex-shrink-0"></span>
+                  <span>Compatible with PC, Mac, and Laptop</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Buy Box - Right Column */}
+          <div className="lg:col-span-3">
+            <div className="border border-gray-300 rounded-lg p-4 sticky top-4">
+              {/* Price */}
+              <div className="mb-3">
+                <span className="text-3xl font-normal">₹{product.price.toLocaleString('en-IN')}</span>
+              </div>
+
+              {/* Delivery */}
+              <div className="mb-3 text-sm">
+                <div className="mb-1">
+                  <span className="text-blue-600">FREE delivery</span> <span className="font-semibold">Sunday, 26 October.</span> <Link to="#" className="text-blue-600 hover:text-orange-600 hover:underline">Details</Link>
                 </div>
+                <div>
+                  Or fastest delivery <span className="font-semibold">Thursday, 23 October.</span> <Link to="#" className="text-blue-600 hover:text-orange-600 hover:underline">Details</Link>
+                </div>
+              </div>
 
-                {/* Quantity & Actions */}
-                <div className="space-y-4">
+              {/* Location */}
+              <div className="mb-4 text-sm">
+                <div className="flex items-start gap-2">
+                  <svg className="w-4 h-4 mt-0.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Quantity</label>
-                    <div className="flex items-center gap-3">
-                      <div className="flex border-2 border-gray-200 rounded-xl overflow-hidden bg-white">
-                        <button
-                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                          className="px-5 py-3 hover:bg-gray-50 transition-colors font-bold text-gray-700"
-                        >
-                          −
-                        </button>
-                        <span className="px-6 py-3 border-x-2 border-gray-200 font-bold text-gray-900 min-w-[60px] text-center">{quantity}</span>
-                        <button
-                          onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
-                          className="px-5 py-3 hover:bg-gray-50 transition-colors font-bold text-gray-700"
-                          disabled={quantity >= maxQuantity}
-                        >
-                          +
-                        </button>
-                      </div>
-                      {stock <= 10 && stock > 0 && (
-                        <span className="text-sm text-orange-600 font-medium flex items-center gap-1">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                          </svg>
-                          Only {stock} left
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <button
-                      onClick={handleBuyNow}
-                      className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all transform hover:scale-[1.02] shadow-lg hover:shadow-xl ${
-                        isOutOfStock 
-                          ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                          : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700'
-                      }`}
-                      disabled={isOutOfStock}
-                    >
-                      {isOutOfStock ? '⚠️ Out of Stock' : '⚡ Buy Now'}
-                    </button>
-                    <button
-                      onClick={handleAddToCart}
-                      className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all transform hover:scale-[1.02] ${
-                        isOutOfStock
-                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                          : 'bg-white border-2 border-purple-600 text-purple-600 hover:bg-purple-50'
-                      }`}
-                      disabled={isOutOfStock}
-                    >
-                      {isOutOfStock ? 'Unavailable' : '🛒 Add to Cart'}
-                    </button>
-                    <button 
-                      onClick={() => setIsWishlisted(!isWishlisted)}
-                      className="w-full border-2 border-gray-200 text-gray-700 py-4 px-6 rounded-xl font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
-                    >
-                      <span className={`text-2xl ${isWishlisted ? 'text-red-500' : ''}`}>
-                        {isWishlisted ? '❤️' : '🤍'}
-                      </span>
-                      {isWishlisted ? 'Added to Wishlist' : 'Add to Wishlist'}
-                    </button>
+                    <span className="text-blue-600 hover:text-orange-600 hover:underline cursor-pointer">Delivering to Chennai 600001</span>
+                    <span className="text-blue-600"> - Update location</span>
                   </div>
                 </div>
+              </div>
 
-                {/* Delivery Info */}
-                <div className="mt-8 pt-6 border-t border-gray-100">
-                  <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                    </svg>
-                    Delivery Options
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">🚚</span>
-                        <div>
-                          <p className="font-semibold text-gray-900 text-sm">Standard Delivery</p>
-                          <p className="text-xs text-gray-600">Delivery in 3-5 days</p>
-                        </div>
-                      </div>
-                      <span className="text-green-600 font-bold">FREE</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg border border-purple-200">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">⚡</span>
-                        <div>
-                          <p className="font-semibold text-gray-900 text-sm">Express Delivery</p>
-                          <p className="text-xs text-gray-600">Get it by tomorrow</p>
-                        </div>
-                      </div>
-                      <span className="text-purple-600 font-bold">₹99</span>
-                    </div>
-                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">🏪</span>
-                        <div>
-                          <p className="font-semibold text-gray-900 text-sm">Store Pickup</p>
-                          <p className="text-xs text-gray-600">Available today</p>
-                        </div>
-                      </div>
-                      <span className="text-green-600 font-bold">FREE</span>
-                    </div>
-                  </div>
-                </div>
+              {/* Stock */}
+              <div className="mb-4">
+                <span className="text-green-700 text-lg font-medium">In Stock</span>
+              </div>
+
+              {/* Seller Info */}
+              <div className="mb-4 text-sm">
+                <div className="mb-1">Ships from <span className="font-medium">Amazon</span></div>
+                <div>Sold by <Link to="#" className="text-blue-600 hover:text-orange-600 hover:underline">Clicktech Retail Private Ltd</Link></div>
+              </div>
+
+              {/* Payment */}
+              <div className="mb-4 text-sm">
+                <div className="text-blue-600 hover:text-orange-600 hover:underline cursor-pointer">Secure transaction</div>
+              </div>
+
+              {/* Quantity */}
+              <div className="mb-4">
+                <label className="text-sm font-medium block mb-1">Quantity:</label>
+                <select 
+                  value={quantity}
+                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  className="border border-gray-400 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-orange-600 focus:ring-1 focus:ring-orange-600 bg-gray-50"
+                >
+                  {[...Array(Math.min(maxQuantity, 10))].map((_, i) => (
+                    <option key={i + 1} value={i + 1}>{i + 1}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Buttons */}
+              <div className="space-y-2 mb-4">
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 py-2 rounded-full font-medium text-sm transition-colors"
+                  disabled={isOutOfStock}
+                >
+                  Add to Cart
+                </button>
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded-full font-medium text-sm transition-colors"
+                  disabled={isOutOfStock}
+                >
+                  Buy Now
+                </button>
+              </div>
+
+              {/* Gift Options */}
+              <div className="mb-3 text-sm">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span>Add gift options</span>
+                </label>
+              </div>
+
+              {/* Wishlist */}
+              <div className="text-sm">
+                <button
+                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  className="text-blue-600 hover:text-orange-600 hover:underline"
+                >
+                  Add to Wish List
+                </button>
               </div>
             </div>
           </div>
