@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import StockBadge from './StockBadge';
 
-export default function ProductCard({ product }){
+function ProductCard({ product }){
   const { addToCart, updateQuantity, getItemQuantity } = useCart();
   
   // Handle both id and productId formats
@@ -128,3 +128,10 @@ export default function ProductCard({ product }){
     </div>
   )
 }
+
+// Memoize to prevent unnecessary re-renders when other products' cart state changes
+export default memo(ProductCard, (prevProps, nextProps) => {
+  // Only re-render if the product itself changes
+  return prevProps.product?.id === nextProps.product?.id &&
+         prevProps.product?.productId === nextProps.product?.productId;
+});

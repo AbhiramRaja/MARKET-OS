@@ -27,15 +27,33 @@ export default function AIRecommendations({ products, userPreferences = {} }) {
       if (result.success) {
         // Parse AI recommendations and match with products
         const recommendedProducts = products.slice(0, 3);
+        // Ensure each product has a unique ID
+        console.log('AI Recommendations:', recommendedProducts.map(p => ({ 
+          id: p.id, 
+          productId: p.productId, 
+          name: p.name 
+        })));
         setRecommendations(recommendedProducts);
       } else {
         // Use fallback recommendations
         const fallback = result.recommendations || products.slice(0, 3);
-        setRecommendations(Array.isArray(fallback) ? fallback : products.slice(0, 3));
+        const finalRecs = Array.isArray(fallback) ? fallback : products.slice(0, 3);
+        console.log('Fallback Recommendations:', finalRecs.map(p => ({ 
+          id: p.id, 
+          productId: p.productId, 
+          name: p.name 
+        })));
+        setRecommendations(finalRecs);
       }
     } catch (error) {
       console.error('Recommendations error:', error);
-      setRecommendations(products.slice(0, 3));
+      const fallbackProducts = products.slice(0, 3);
+      console.log('Error Fallback:', fallbackProducts.map(p => ({ 
+        id: p.id, 
+        productId: p.productId, 
+        name: p.name 
+        })));
+      setRecommendations(fallbackProducts);
     } finally {
       setLoading(false);
     }
