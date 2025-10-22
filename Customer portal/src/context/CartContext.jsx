@@ -91,7 +91,9 @@ export function CartProvider({ children }){
   
   const getItemQuantity = (id) => {
     const item = cart.find(i => i.id === id);
-    return item ? item.quantity : 0;
+    const quantity = item ? item.quantity : 0;
+    console.log(`[CartContext] getItemQuantity for ID: "${id}" -> Quantity: ${quantity}`, { cartItems: cart.map(c => ({id: c.id, name: c.name, qty: c.quantity})) });
+    return quantity;
   };
   const removeFromCart = (id) => setCart(prev => prev.filter(i=>i.id!==id));
   const clearCart = () => setCart([]);
