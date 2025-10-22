@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SearchBar from '../components/common/SearchBar';
 import ProductCard from '../components/common/ProductCard';
 import VisualSearchModal from '../components/VisualSearchModal';
+import AIRecommendations from '../components/AIRecommendations';
 import productsMock from '../mock/products.json';
 import ProductService from '../services/ProductService';
 
@@ -125,6 +126,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* AI Recommendations Section - Powered by Amazon Bedrock */}
+      <AIRecommendations products={products} />
 
       {/* Featured Products Section */}
       <section className="featured-products-section">
