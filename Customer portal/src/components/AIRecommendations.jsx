@@ -112,7 +112,10 @@ export default function AIRecommendations({ products, userPreferences = {} }) {
           gap: '1.5rem'
         }}>
           {recommendations.map((product, index) => (
-            <ProductCard key={product.productId || index} product={product} />
+            <ProductCard 
+              key={product.productId || product.id || `ai-rec-${index}`} 
+              product={product} 
+            />
           ))}
         </div>
       </div>

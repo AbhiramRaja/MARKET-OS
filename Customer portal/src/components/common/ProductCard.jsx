@@ -6,7 +6,8 @@ import StockBadge from './StockBadge';
 export default function ProductCard({ product }){
   const { addToCart, updateQuantity, getItemQuantity } = useCart();
   
-  const productId = product?.id || 'sample';
+  // Handle both id and productId formats
+  const productId = product?.id || product?.productId || 'sample';
   const currentQuantity = getItemQuantity(productId) || 0;
   const stock = product?.stock !== undefined ? product.stock : 100; // Default to 100 if not set
   const isOutOfStock = stock === 0;
@@ -39,7 +40,7 @@ export default function ProductCard({ product }){
 
   return (
     <div className="product-card" role="article" aria-label={product?.name || 'Product card'}>
-      <Link to={product ? `/product/${product.id}` : `/product/1`}>
+      <Link to={product ? `/product/${productId}` : `/product/1`}>
         <div className="product-image">
           {product?.image ? (
             <img src={product.image} alt={product.name || 'Product image'} className="product-thumb" />
@@ -88,7 +89,7 @@ export default function ProductCard({ product }){
 
         <div className="product-actions">
         <Link 
-          to={product ? `/product/${product.id}` : `/product/1`}
+          to={product ? `/product/${productId}` : `/product/1`}
           className="btn btn-secondary"
         >
           View Details
